@@ -5,11 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="description" content="The Living Tank is a public-facing freshwater aquarium showcase featuring fish, plants, snails, and aquarium notes in a rich interactive landing page.">
 <meta name="theme-color" content="#04110f">
-<meta property="og:title" content="The Living Tank">
+<meta property="og:title" content="Nature Aquarium">
 <meta property="og:description" content="Freshwater aquarium showcase with fish, plants, snails, and tank details.">
 <meta property="og:type" content="website">
 <meta name="robots" content="index, follow">
-<title>The Living Tank</title>
+<title>Nature Aquarium</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
 <style>
@@ -29,28 +29,34 @@
   color-scheme:dark;
 }
 *{box-sizing:border-box}
-body{margin:0;background:var(--abyss);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55}
+body{margin:0;background:var(--abyss);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55;overflow-x:hidden}
 
-.hero{position:relative;height:clamp(560px,86vh,820px);overflow:hidden;isolation:isolate;background:var(--deep)}
+.hero{position:relative;min-height:clamp(560px,86vh,820px);display:flex;flex-direction:column;justify-content:flex-end;overflow:hidden;isolation:isolate;background:var(--deep)}
 #tank{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:crosshair}
-.hero::after{content:"";position:absolute;inset:0;pointer-events:none;
+.shade{position:absolute;inset:0;pointer-events:none;
   background:linear-gradient(90deg,rgba(4,17,15,.82) 0%,rgba(4,17,15,.35) 45%,rgba(4,17,15,0) 70%),
              linear-gradient(0deg,rgba(4,17,15,.9) 0%,rgba(4,17,15,0) 32%)}
 
-.nav{position:absolute;top:0;left:0;right:0;z-index:3;display:flex;align-items:center;justify-content:space-between;gap:16px;
-  padding:calc(18px + env(safe-area-inset-top,0px)) clamp(16px,4vw,48px) 18px}
-.brand{font-family:var(--f-display);font-size:1.35rem;letter-spacing:.01em;color:var(--ink);text-decoration:none}
-.brand span{color:var(--leaf)}
-.links{display:flex;gap:clamp(14px,2.4vw,32px);font-size:.9rem}
-.links a{color:var(--muted);text-decoration:none;transition:color .2s}
-.links a:hover,.links a:focus-visible{color:var(--glow)}
-
-.copy{position:absolute;z-index:2;left:clamp(16px,4vw,48px);right:16px;bottom:clamp(40px,8vh,88px);max-width:620px;pointer-events:none}
+/* No z-index here: the ribbons must blend against the tank canvas, so .copy can't be its own stacking context */
+/* In normal flow so the hero grows with it on short screens */
+.copy{position:relative;margin:0 16px 0 clamp(16px,4vw,48px);padding:calc(48px + env(safe-area-inset-top,0px)) 0 clamp(40px,8vh,88px);max-width:620px;pointer-events:none}
 .eyebrow{font-family:var(--f-mono);font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--leaf);margin:0 0 18px;
   display:flex;align-items:center;gap:10px}
 .eyebrow::before{content:"";width:28px;height:1px;background:var(--leaf)}
-h1{font-family:var(--f-display);font-weight:400;font-size:clamp(2.6rem,7vw,5.4rem);line-height:.98;letter-spacing:-.02em;margin:0;text-wrap:balance}
-h1 em{font-style:italic;color:var(--glow)}
+.title-visual{display:grid;gap:10px;max-width:620px;margin:0 0 18px;font-size:1rem;font-weight:400}
+.ribbon{display:inline-block;position:relative;max-width:100%;width:fit-content;padding:.14em .26em .18em;border-radius:999px;background:#fff;color:#000;mix-blend-mode:screen;box-shadow:0 18px 40px rgba(0,0,0,.24), inset 0 0 0 1px rgba(0,0,0,.04);transform-origin:center;
+  font-family:var(--f-display);font-weight:400;line-height:.8;letter-spacing:-.07em;font-size:clamp(3.3rem,8vw,6.5rem);text-transform:uppercase;white-space:nowrap;}
+.ribbon:nth-child(1){transform:rotate(-6deg) translateX(-8px);animation:bandShiftA 7s ease-in-out infinite alternate;}
+.ribbon:nth-child(2){transform:rotate(4deg) translateX(16px);animation:bandShiftB 8s ease-in-out infinite alternate;}
+.ribbon::before{content:"";position:absolute;inset:0;border-radius:999px;border:1px solid rgba(0,0,0,.06);pointer-events:none;}
+.ribbon::after{content:"";position:absolute;inset:8% 4% auto auto;width:12%;height:70%;border-radius:50%;background:rgba(0,0,0,.03);filter:blur(10px);transform:translateY(18%);pointer-events:none;}
+@keyframes bandShiftA{0%{transform:rotate(-6deg) translateX(-8px) translateY(0px)}50%{transform:rotate(-3deg) translateX(-3px) translateY(5px)}100%{transform:rotate(-7deg) translateX(-10px) translateY(-4px)}}
+@keyframes bandShiftB{0%{transform:rotate(4deg) translateX(16px) translateY(0px)}50%{transform:rotate(7deg) translateX(10px) translateY(-5px)}100%{transform:rotate(2deg) translateX(18px) translateY(4px)}}
+.tagline{margin:0 0 6px}
+.ribbon-sm{display:inline-block;padding:.5em 1.1em .56em;border-radius:999px;border:1px solid rgba(200,245,210,.3);background:rgba(4,17,15,.4);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  font-family:var(--f-display);font-size:clamp(1.1rem,2.2vw,1.55rem);line-height:1.1;letter-spacing:.005em;color:var(--ink);transform:rotate(-2deg) translateX(10px);animation:bandShiftC 9s ease-in-out infinite alternate}
+.ribbon-sm em{font-style:italic;color:var(--glow)}
+@keyframes bandShiftC{0%{transform:rotate(-2deg) translateX(10px) translateY(0px)}50%{transform:rotate(-.5deg) translateX(6px) translateY(3px)}100%{transform:rotate(-3deg) translateX(12px) translateY(-2px)}}
 .lede{color:var(--muted);font-size:clamp(1rem,1.6vw,1.12rem);max-width:46ch;margin:20px 0 28px}
 .ctas{display:flex;flex-wrap:wrap;gap:12px;pointer-events:auto}
 .btn{font:600 .95rem var(--f-body);padding:13px 22px;border-radius:999px;text-decoration:none;transition:transform .2s,background .2s,color .2s}
@@ -58,27 +64,59 @@ h1 em{font-style:italic;color:var(--glow)}
 .btn-primary:hover{background:var(--glow);transform:translateY(-2px)}
 .btn-ghost{color:var(--ink);border:1px solid var(--line);backdrop-filter:blur(6px);background:rgba(4,17,15,.3)}
 .btn-ghost:hover{border-color:var(--leaf);color:var(--glow)}
-.btn:focus-visible,.links a:focus-visible,.brand:focus-visible,.photo-link:focus-visible{outline:2px solid var(--glow);outline-offset:3px}
+.btn:focus-visible,.photo-link:focus-visible,.toggle:focus-visible,.popup-close:focus-visible{outline:2px solid var(--glow);outline-offset:3px}
 
 .params{position:absolute;z-index:2;right:clamp(16px,4vw,48px);bottom:clamp(40px,8vh,88px);display:grid;gap:10px;
   font-family:var(--f-mono);font-size:.74rem;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums;pointer-events:none}
 .params b{display:block;font-weight:500;color:var(--glow);font-size:.95rem}
-.hint{position:absolute;z-index:2;top:50%;right:clamp(16px,4vw,48px);transform:translateY(-50%);font-family:var(--f-mono);font-size:.68rem;
-  letter-spacing:.14em;text-transform:uppercase;color:var(--muted);writing-mode:vertical-rl;opacity:.7;pointer-events:none}
+.hint{position:absolute;z-index:2;top:36%;right:clamp(24px,10vw,150px);display:flex;align-items:center;gap:12px;padding:10px 18px 10px 15px;border-radius:999px;
+  border:1px solid rgba(200,245,210,.3);background:rgba(4,17,15,.42);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  font-family:var(--f-mono);font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--glow);pointer-events:none;transition:opacity .6s ease}
+.hint::before{content:"";flex:none;width:8px;height:8px;border-radius:50%;background:var(--leaf);animation:hintPulse 1.8s ease-out infinite}
+.hint.used{opacity:0}
+@keyframes hintPulse{0%{box-shadow:0 0 0 0 rgba(127,209,139,.6)}100%{box-shadow:0 0 0 14px rgba(127,209,139,0)}}
 
 .guide{padding:clamp(40px,7vw,88px) clamp(16px,4vw,48px) 48px;max-width:1240px;margin:0 auto;display:grid;gap:32px}
-.guide-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:20px}
-.guide-head h2{font-family:var(--f-display);font-weight:400;font-size:clamp(1.9rem,4vw,2.8rem);line-height:1.05;margin:0;text-wrap:balance}
+.guide-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:20px;opacity:0;animation:guideReveal .7s ease forwards;animation-delay:.15s}
+@keyframes guideReveal{from{opacity:0;transform:translateY(18px)}to{opacity:1;transform:none}}
+.guide-head h2{font-family:var(--f-display);font-weight:400;font-size:clamp(1.9rem,4vw,2.8rem);line-height:1.05;margin:0;text-wrap:balance;letter-spacing:-.02em}
 .chips{display:flex;flex-wrap:wrap;gap:8px}
-.chip{font:500 .88rem var(--f-body);color:var(--muted);background:transparent;border:1px solid var(--line);border-radius:999px;padding:9px 16px;cursor:pointer;transition:all .2s}
-.chip:hover{color:var(--ink);border-color:var(--muted)}
-.chip[aria-pressed="true"]{background:var(--leaf);border-color:var(--leaf);color:var(--abyss)}
+.chip{position:relative;overflow:hidden;font:500 .88rem var(--f-body);color:var(--muted);background:rgba(8,19,18,.6);border:1px solid var(--line);border-radius:999px;padding:10px 17px;cursor:pointer;transition:transform .2s ease, border-color .2s ease, color .2s ease, box-shadow .2s ease, background .2s ease;}
+.chip::before{content:"";position:absolute;inset:-1px;background:linear-gradient(120deg,transparent 10%,rgba(255,255,255,.18) 50%,transparent 90%);transform:translateX(-120%);transition:transform .7s ease}
+.chip:hover{color:var(--ink);border-color:rgba(200,245,210,.5);transform:translateY(-2px);box-shadow:0 8px 18px rgba(12,28,20,.35)}
+.chip:hover::before{transform:translateX(120%)}
+.chip[aria-pressed="true"]{background:linear-gradient(135deg,var(--leaf),#a9efb1);border-color:var(--leaf);color:var(--abyss);box-shadow:0 10px 22px rgba(127,209,139,.28)}
+.chip[aria-pressed="true"]::before{transform:translateX(120%)}
 .chip:focus-visible{outline:2px solid var(--glow);outline-offset:2px}
 
 .cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,330px),1fr));gap:16px}
-.card{background:var(--deep);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:grid;align-content:start;min-width:0;animation:rise .5s ease both}
-@keyframes rise{from{transform:translateY(10px)}to{transform:none}}
+.card{background:var(--deep);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:grid;align-content:start;min-width:0;opacity:0;transform:translateY(36px) rotate(-1.2deg) scale(.98);transition:transform .25s ease, border-color .25s ease, box-shadow .25s ease, opacity .35s ease}
+.card.in-view{animation:speciesReveal .8s cubic-bezier(.18,.85,.18,1) both;animation-delay:var(--reveal-delay, 0ms)}
+.card.shown{opacity:1;transform:none}
+.card:hover{transform:translateY(-6px) rotate(0deg);border-color:rgba(200,245,210,.4);box-shadow:0 16px 28px rgba(0,0,0,.22)}
+@keyframes speciesReveal{0%{opacity:0;transform:translateY(36px) rotate(-2.5deg) scale(.96)}25%{opacity:.5;transform:translateY(18px) rotate(-1deg) scale(.98)}100%{opacity:1;transform:translateY(0) rotate(0) scale(1)}}
 .photo{position:relative;aspect-ratio:16/10;max-width:100%;overflow:hidden;display:grid;place-items:end start;padding:14px 16px}
+.preview{display:grid;gap:8px;padding-top:6px;color:var(--muted)}
+.preview-line{margin:0;font-size:.9rem;line-height:1.4}
+.preview-line b{color:var(--ink);font-weight:600}
+.toggle{justify-self:start;margin-top:10px;padding:8px 12px;border-radius:999px;border:1px solid var(--line);background:rgba(255,255,255,.02);color:var(--glow);font:600 .78rem var(--f-body);letter-spacing:.06em;text-transform:uppercase;cursor:pointer;transition:transform .2s ease,border-color .2s ease, background .2s ease}
+.toggle:hover{transform:translateY(-1px);border-color:rgba(200,245,210,.4);background:rgba(127,209,139,.08)}
+.overlay{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;padding:32px;pointer-events:none;opacity:0;transition:opacity .3s ease;z-index:30}
+.overlay.visible{opacity:1;pointer-events:auto}
+.overlay-backdrop{position:absolute;inset:0;background:rgba(2,10,9,.66);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+.popup-card{position:relative;max-width:min(760px, 92vw);width:min(760px, 92vw);background:linear-gradient(180deg, rgba(7,36,32,.96), rgba(4,17,15,.98));border:1px solid var(--line);border-radius:22px;max-height:calc(100vh - 24px);max-height:calc(100dvh - 24px);overflow:hidden auto;overscroll-behavior:contain;transform:scale(.72) translateY(30px);opacity:0;transition:transform .45s cubic-bezier(.18,.85,.18,1), opacity .3s ease;box-shadow:0 28px 70px rgba(0,0,0,.4)}
+.overlay.visible .popup-card{transform:scale(1) translateY(0);opacity:1}
+.popup-visual{position:relative;aspect-ratio:16/9;overflow:hidden;border-bottom:1px solid var(--line)}
+.popup-visual img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.popup-body{padding:22px 24px 18px;display:grid;gap:14px}
+.popup-head{display:flex;align-items:flex-start;justify-content:space-between;gap:16px}
+.popup-head h3{font-family:var(--f-display);font-size:clamp(2rem,4vw,3rem);margin:0;line-height:1}
+.popup-close{appearance:none;border:1px solid var(--line);color:var(--ink);background:rgba(255,255,255,.03);border-radius:50%;width:38px;height:38px;cursor:pointer;font-size:1.2rem}
+.popup-meta{display:flex;flex-wrap:wrap;gap:10px}
+.popup-pill{padding:6px 10px;border-radius:999px;border:1px solid var(--line);color:var(--glow);font-family:var(--f-mono);font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;background:rgba(127,209,139,.06)}
+.popup-copy{margin:0;color:var(--muted);font-size:1rem;line-height:1.7}
+.popup-actions{display:flex;flex-wrap:wrap;gap:10px}
+.popup-actions .btn{display:inline-flex;align-items:center;justify-content:center;padding:10px 16px;border:0;cursor:pointer}
 .photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
 .photo .ghost{position:absolute;right:-6px;bottom:-18px;font-family:var(--f-display);font-style:italic;font-size:4.2rem;line-height:1;color:rgba(232,243,238,.08);white-space:nowrap;pointer-events:none}
 .tag{position:relative;font-family:var(--f-mono);font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;background:rgba(4,17,15,.7);color:var(--glow);padding:5px 9px;border-radius:999px}
@@ -98,36 +136,81 @@ h1 em{font-style:italic;color:var(--glow)}
 .foot{font-size:.85rem;color:var(--muted);text-align:center;padding-top:16px}
 
 @media (max-width:760px){
-  .links,.hint,.params{display:none}
-  .hero::after{background:linear-gradient(0deg,rgba(4,17,15,.95) 0%,rgba(4,17,15,.4) 55%,rgba(4,17,15,.1) 100%)}
+  .params{display:none}
+  .hint{position:relative;top:auto;right:auto;align-self:flex-start;margin:0 16px 22px}
+  .hero{min-height:clamp(420px,58vh,520px)}
+  .shade{background:linear-gradient(0deg,rgba(4,17,15,.95) 0%,rgba(4,17,15,.4) 55%,rgba(4,17,15,.1) 100%)}
+  .copy{margin:0 16px;padding:32px 0 16px;max-width:none}
+  .title-visual{gap:6px}
+  .ribbon{white-space:normal;line-height:.88}
+  .lede{margin-bottom:20px}
+  .btn{padding:12px 18px}
+  .guide{padding-top:24px}
+  .guide-head{align-items:flex-start}
+  .chips{width:100%}
+  .chip{flex:1 1 calc(50% - 8px);justify-content:center;text-align:center}
+  .cards{grid-template-columns:1fr}
+  .body{padding:16px}
+  .popup-card{max-width:calc(100vw - 20px);width:calc(100vw - 20px)}
+  .popup-body{padding:18px 18px 16px}
+  .popup-head{align-items:center}
+  .popup-copy{font-size:.96rem}
+  .popup-actions{display:grid;grid-template-columns:1fr}
+  .popup-actions .btn{width:100%}
+  .facts{grid-template-columns:repeat(3,minmax(0,1fr));font-size:.75rem}
 }
-@media (prefers-reduced-motion:reduce){.card{animation:none}.btn{transition:none}}
+@media (max-width:420px){
+  .eyebrow{letter-spacing:.08em;font-size:.68rem;gap:8px}
+  .eyebrow::before{width:20px}
+  .hero{min-height:clamp(360px,48vh,440px)}
+  .copy{padding:28px 0 14px}
+  .title-visual{margin-bottom:12px}
+  .ribbon{font-size:clamp(2.5rem,13vw,4rem)}
+  .lede{font-size:.96rem}
+  .ctas{display:grid;grid-template-columns:1fr}
+  .btn{width:100%;text-align:center}
+  .guide{padding-left:14px;padding-right:14px;padding-top:18px}
+  .guide-head h2{font-size:2rem}
+  .card{border-radius:12px}
+  .preview{gap:6px}
+  .preview-line{font-size:.82rem}
+  .toggle{padding:7px 10px}
+  .facts{grid-template-columns:repeat(2,minmax(0,1fr))}
+  .facts dd{font-size:.8rem}
+  .popup-card{max-width:calc(100vw - 12px);width:calc(100vw - 12px)}
+  .popup-visual{aspect-ratio:4/3}
+  .popup-head h3{font-size:1.7rem}
+  .popup-meta{gap:8px}
+  .popup-pill{padding:5px 8px;font-size:.62rem}
+  .popup-close{width:34px;height:34px;font-size:1rem}
+  .photo-link{font-size:.82rem}
+}
+@media (prefers-reduced-motion:reduce){
+  .card,.card.in-view{animation:none;opacity:1;transform:none;transition:none}
+  .guide-head{animation:none;opacity:1}
+  .ribbon,.ribbon-sm,.hint::before{animation:none}
+  .btn,.chip,.chip::before,.toggle,.overlay,.popup-card{transition:none}
+}
 </style>
 </head>
 <body>
 <section class="hero" aria-label="Animated view of the aquarium">
   <canvas id="tank" aria-hidden="true"></canvas>
-  <nav class="nav" aria-label="Main navigation">
-    <a class="brand" href="#">The Living Tank<span>.</span></a>
-    <div class="links">
-      <a href="#species" data-jump="animal">Fish &amp; snails</a><a href="#species" data-jump="plant">Plants</a><a href="#species" data-jump="rock">Rocks</a>
-    </div>
-  </nav>
+  <div class="shade" aria-hidden="true"></div>
   <div class="copy">
-    <p class="eyebrow">You scanned the tank · Freshwater</p>
-    <h1>Meet who lives <em>in here.</em></h1>
-    <p class="lede">Every fish, snail, plant and stone in this aquarium, where it comes from, and something worth knowing about it. Look up, then look closer.</p>
+    <p class="eyebrow">CSO Office</p>
+    <h1 class="title-visual">
+      <span class="ribbon">Nature</span>
+      <span class="ribbon">Aquarium</span>
+    </h1>
+    <p class="tagline"><span class="ribbon-sm">Meet who lives <em>in here.</em></span></p>
+    <p class="lede">A calm view of the freshwater life in this tank, from the fish and snails to the plants and stones beneath them.</p>
     <div class="ctas">
-      <a class="btn btn-primary" href="#species" data-jump="animal">Meet the fish</a>
-      <a class="btn btn-ghost" href="#species" data-jump="plant">See the plants</a>
+      <a class="btn btn-primary" href="#species" data-jump="animal">Explore species</a>
+      <a class="btn btn-ghost" href="#species" data-jump="plant">View plants</a>
     </div>
   </div>
-  <div class="params" aria-label="What lives in this tank">
-    <div>Fish<b id="nFish">0</b></div>
-    <div>Snails<b id="nSnail">0</b></div>
-    <div>Plants<b id="nPlant">0</b></div>
-    <div>Stones<b id="nRock">0</b></div>
-  </div>
+  <div class="params" aria-label="What lives in this tank" aria-hidden="true" style="display:none"></div>
   <div class="hint">Touch the water</div>
 </section>
 
@@ -215,34 +298,135 @@ const SPECIES = [
 
 (() => {
   const wrap = document.getElementById('cards');
-  const count = k => SPECIES.filter(s => s.kind === k).length;
-  const fishCount = () => SPECIES.filter(s => s.kind === 'animal' && s.tag !== 'Snail').length;
-  const snailCount = () => SPECIES.filter(s => s.kind === 'animal' && s.tag === 'Snail').length;
-  document.getElementById('nFish').textContent = fishCount();
-  document.getElementById('nSnail').textContent = snailCount();
-  document.getElementById('nPlant').textContent = count('plant');
-  document.getElementById('nRock').textContent = count('rock');
-  const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  const esc = s => String(s).replace(/[&<>\"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','\"':'&quot;'}[c]));
   function render(filter){
-    document.getElementById('nFish').textContent = fishCount();
-    document.getElementById('nSnail').textContent = snailCount();
-    document.getElementById('nPlant').textContent = count('plant');
-    document.getElementById('nRock').textContent = count('rock');
     wrap.innerHTML = SPECIES.filter(s => filter === 'all' || s.kind === filter).map((s, i) => `
-      <article class="card" style="animation-delay:${i * 50}ms">
+      <article class="card" style="--reveal-delay:${i * 50}ms" data-name="${esc(s.name)}" data-sci="${esc(s.sci)}" data-zone="${esc(s.zone)}" data-fact="${esc(s.fact)}" data-kind="${esc(s.tag)}" data-photo="${esc(s.photo)}">
         <div class="photo" style="background:radial-gradient(120% 90% at 20% 10%, ${s.color[1]}55, transparent 60%), linear-gradient(160deg, ${s.color[0]}, #04110f)">
           ${s.photo ? `<img src="${esc(s.photo)}" alt="${esc(s.name)} in the tank" loading="lazy">` : `<span class="ghost" aria-hidden="true">${esc(s.sci.split(' ')[0])}</span>`}
           <span class="tag">${esc(s.tag)}</span>
         </div>
         <div class="body">
           <div><h3>${esc(s.name)}</h3><p class="sci">${esc(s.sci)}</p></div>
-          <dl class="facts">${s.facts.map(f => `<div><dt>${esc(f[0])}</dt><dd>${esc(f[1])}</dd></div>`).join('')}</dl>
-          <p class="where"><b>Spot it:</b> ${esc(s.zone)}</p>
-          <p class="dyk"><span>Did you know</span>${esc(s.fact)}</p>
-          ${s.wiki ? `<a class="photo-link" href="${esc(s.wiki)}" target="_blank" rel="noopener">See photos and more ↗</a>` : ''}
+          <div class="preview">
+            <p class="preview-line"><b>Where:</b> ${esc(s.zone)}</p>
+            <p class="preview-line">${esc(s.fact.slice(0, 82))}${s.fact.length > 82 ? '…' : ''}</p>
+          </div>
+          <button class="toggle" type="button" aria-haspopup="dialog">See more</button>
         </div>
       </article>`).join('');
+
+    const cards = wrap.querySelectorAll('.card');
+    const seen = new WeakSet();
+    const observer = new IntersectionObserver((entries, obs) => {
+      entries.forEach(entry => {
+        if (!entry.isIntersecting) return;
+        if (seen.has(entry.target)) return;
+        entry.target.classList.add('in-view');
+        seen.add(entry.target);
+        obs.unobserve(entry.target);
+      });
+    }, { threshold: 0.18, rootMargin: '0px 0px -30px 0px' });
+
+    cards.forEach(card => {
+      const species = SPECIES.find(item => item.name === card.dataset.name && item.sci === card.dataset.sci);
+      card._species = species || null;
+      observer.observe(card);
+      // Hand off from the reveal animation so the hover transform can apply
+      card.addEventListener('animationend', () => card.classList.replace('in-view', 'shown'), { once: true });
+      const toggleButton = card.querySelector('.toggle');
+      toggleButton.addEventListener('click', () => openPopup(card));
+    });
   }
+
+  let popupOpen = false, closeTimer = 0, lastFocus = null;
+
+  function closePopup(){
+    const overlay = document.getElementById('species-overlay');
+    if (!overlay || !popupOpen) return;
+    popupOpen = false;
+    overlay.classList.remove('visible');
+    document.removeEventListener('keydown', onPopupKey);
+    document.body.style.overflow = '';
+    document.body.style.paddingRight = '';
+    if (lastFocus && document.contains(lastFocus)) lastFocus.focus({ preventScroll: true });
+    lastFocus = null;
+    clearTimeout(closeTimer);
+    closeTimer = setTimeout(() => {
+      overlay.innerHTML = '';
+    }, 220);
+  }
+
+  function onPopupKey(e){
+    if (e.key === 'Escape'){ closePopup(); return; }
+    if (e.key !== 'Tab') return;
+    const overlay = document.getElementById('species-overlay');
+    const items = overlay.querySelectorAll('button, a[href]');
+    if (!items.length) return;
+    const first = items[0], last = items[items.length - 1];
+    if (!overlay.contains(document.activeElement)){ e.preventDefault(); first.focus(); }
+    else if (e.shiftKey && document.activeElement === first){ e.preventDefault(); last.focus(); }
+    else if (!e.shiftKey && document.activeElement === last){ e.preventDefault(); first.focus(); }
+  }
+
+  function openPopup(card){
+    clearTimeout(closeTimer);
+    if (!popupOpen) lastFocus = document.activeElement;
+    const species = card._species || SPECIES.find(item => item.name === card.dataset.name && item.sci === card.dataset.sci) || {};
+    const name = species.name || card.dataset.name;
+    const sci = species.sci || card.dataset.sci;
+    const zone = species.zone || card.dataset.zone;
+    const fact = species.fact || card.dataset.fact;
+    const kind = species.tag || card.dataset.kind;
+    const photo = species.photo || card.dataset.photo;
+    const overlay = document.getElementById('species-overlay') || Object.assign(document.createElement('div'), { id: 'species-overlay', className: 'overlay' });
+    overlay.classList.remove('visible');
+    overlay.innerHTML = `
+      <div class="overlay-backdrop" aria-hidden="true"></div>
+      <div class="popup-card" role="dialog" aria-modal="true" aria-label="${esc(name)}">
+        <div class="popup-visual">
+          ${photo ? `<img src="${esc(photo)}" alt="${esc(name)}" loading="eager">` : ''}
+        </div>
+        <div class="popup-body">
+          <div class="popup-head">
+            <div>
+              <div class="popup-meta">
+                <span class="popup-pill">${esc(kind)}</span>
+              </div>
+              <h3>${esc(name)}</h3>
+              <p class="sci">${esc(sci)}</p>
+            </div>
+            <button class="popup-close" type="button" aria-label="Close">×</button>
+          </div>
+          <dl class="facts">${(species.facts || []).map(f => `<div><dt>${esc(f[0])}</dt><dd>${esc(f[1])}</dd></div>`).join('')}</dl>
+          <p class="popup-copy"><b>Spot it:</b> ${esc(zone)}</p>
+          <p class="dyk"><span>Did you know</span>${esc(fact)}</p>
+          ${species.wiki ? `<a class="photo-link" href="${esc(species.wiki)}" target="_blank" rel="noopener">Learn more ↗</a>` : ''}
+          <div class="popup-actions">
+            <button class="btn btn-primary popup-back" type="button">Back to list</button>
+          </div>
+        </div>
+      </div>
+    `;
+
+    const closeButton = overlay.querySelector('.popup-close');
+    closeButton.addEventListener('click', closePopup);
+    overlay.querySelector('.overlay-backdrop').addEventListener('click', closePopup);
+    overlay.querySelector('.popup-back').addEventListener('click', closePopup);
+
+    document.body.appendChild(overlay);
+    if (!popupOpen){
+      // Lock page scroll behind the dialog without shifting the layout
+      const scrollbar = window.innerWidth - document.documentElement.clientWidth;
+      document.body.style.overflow = 'hidden';
+      if (scrollbar > 0) document.body.style.paddingRight = scrollbar + 'px';
+      document.addEventListener('keydown', onPopupKey);
+    }
+    popupOpen = true;
+    closeButton.focus({ preventScroll: true });
+    requestAnimationFrame(() => { if (popupOpen) overlay.classList.add('visible'); });
+  }
+
   function setFilter(f){
     document.querySelectorAll('.chip').forEach(c => c.setAttribute('aria-pressed', String(c.dataset.filter === f)));
     render(f);
@@ -311,7 +495,10 @@ const SPECIES = [
   }
   function resize(){
     const r = cv.getBoundingClientRect();
-    DPR = Math.min(window.devicePixelRatio || 1, 2);
+    const dpr = Math.min(window.devicePixelRatio || 1, 2);
+    // Mobile browsers fire resize when the address bar hides; keep the tank as it is unless its size really changed
+    if (r.width === W && r.height === H && dpr === DPR) return;
+    DPR = dpr;
     W = r.width; H = r.height;
     cv.width = W * DPR; cv.height = H * DPR;
     ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
@@ -622,6 +809,12 @@ const SPECIES = [
   hero.addEventListener('pointerleave', () => { pointer.active = false; });
   hero.addEventListener('touchmove', setPointer, { passive: true });
   hero.addEventListener('touchend', () => { pointer.active = false; });
+  // The hint fades once the visitor touches the tank, and resets while the hero is scrolled away so it's back when they return
+  const hint = hero.querySelector('.hint');
+  hero.addEventListener('pointerdown', () => hint.classList.add('used'));
+  new IntersectionObserver(([entry]) => {
+    if (entry.intersectionRatio < .3) hint.classList.remove('used');
+  }, { threshold: .3 }).observe(hero);
   hero.addEventListener('click', e => {
     const r = cv.getBoundingClientRect();
     for (let i = 0; i < 10; i++) bubbles.push({ x: e.clientX - r.left + rand(-8, 8), y: e.clientY - r.top + rand(-8, 8), r: rand(1, 3.5), sp: rand(50, 110), ph: rand(0, 6.28), temp: true });

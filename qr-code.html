@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>CSO Nature Aquarium QR Code</title>
+    <style>
+      :root {
+        --bg-1: #061a1d;
+        --bg-2: #0a2a2c;
+        --panel: rgba(8, 22, 28, 0.8);
+        --line: rgba(142, 219, 201, 0.45);
+        --text: #eafaf7;
+        --muted: #b8d9d4;
+        --gold: #d4af68;
+        --gold-soft: #f4e3b0;
+      }
+
+      * { box-sizing: border-box; }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background:
+          radial-gradient(circle at top, rgba(212, 175, 104, 0.14), transparent 30%),
+          linear-gradient(135deg, var(--bg-1), var(--bg-2) 52%, #0a131f);
+        font-family: Arial, Helvetica, sans-serif;
+        color: var(--text);
+      }
+
+      .card {
+        width: min(92vw, 440px);
+        max-width: calc(100vw - 24px);
+        background: var(--panel);
+        border: 1px solid var(--line);
+        border-radius: 26px;
+        padding: clamp(18px, 5vw, 30px) clamp(14px, 4vw, 24px) 18px;
+        box-shadow: 0 18px 50px rgba(0, 0, 0, 0.38);
+        text-align: center;
+        position: relative;
+      }
+
+      .card::before {
+        content: "";
+        position: absolute;
+        inset: 12px;
+        border: 1px solid rgba(212, 175, 104, 0.18);
+        border-radius: 20px;
+        pointer-events: none;
+      }
+
+      .brand {
+        font-size: clamp(0.62rem, 2.2vw, 0.78rem);
+        letter-spacing: 0.22em;
+        text-transform: uppercase;
+        color: var(--gold-soft);
+        margin-bottom: 10px;
+        line-height: 1.4;
+      }
+
+      h1 {
+        margin: 0 0 18px;
+        font-size: clamp(1.15rem, 5vw, 2rem);
+        font-weight: 600;
+        letter-spacing: 0.02em;
+        line-height: 1.2;
+      }
+
+      img {
+        display: block;
+        width: min(72vw, 300px);
+        max-width: min(300px, 72vw);
+        height: auto;
+        margin: 0 auto 14px;
+        border-radius: 18px;
+        background: #ffffff;
+        padding: 10px;
+        box-shadow: 0 10px 24px rgba(0, 0, 0, 0.2);
+      }
+
+      .cta {
+        display: inline-block;
+        margin-top: 8px;
+        color: var(--gold-soft);
+        text-decoration: none;
+        font-weight: 700;
+        letter-spacing: 0.04em;
+        font-size: clamp(0.8rem, 3vw, 1rem);
+      }
+
+      @media (max-width: 420px) {
+        body {
+          padding: 12px;
+        }
+
+        .card {
+          width: 100%;
+          border-radius: 22px;
+        }
+
+        .card::before {
+          inset: 10px;
+          border-radius: 17px;
+        }
+
+        img {
+          width: min(68vw, 260px);
+          max-width: 260px;
+          padding: 8px;
+        }
+      }
+
+      .cta:hover {
+        text-decoration: underline;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="card">
+      <div class="brand">CSO Nature Aquarium</div>
+      <h1>Scan to discover the species</h1>
+      <img src="https://api.qrserver.com/v1/create-qr-code/?size=600x600&data=https%3A%2F%2Fraizenpain.github.io%2FCSO-NATUREAQUARIUM%2F" alt="QR code for CSO Nature Aquarium website" />
+      <a class="cta" href="https://raizenpain.github.io/CSO-NATUREAQUARIUM/" target="_blank" rel="noopener noreferrer">Open website</a>
+    </div>
+  </body>
+</html>
