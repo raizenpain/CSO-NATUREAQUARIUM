@@ -1,0 +1,637 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="The Living Tank is a public-facing freshwater aquarium showcase featuring fish, plants, snails, and aquarium notes in a rich interactive landing page.">
+<meta name="theme-color" content="#04110f">
+<meta property="og:title" content="The Living Tank">
+<meta property="og:description" content="Freshwater aquarium showcase with fish, plants, snails, and tank details.">
+<meta property="og:type" content="website">
+<meta name="robots" content="index, follow">
+<title>The Living Tank</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Gloock&family=Figtree:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: full-bleed living tank as the hero, copy floating low-left over the water, species guide below */
+:root{
+  --abyss:#04110f;
+  --deep:#072420;
+  --water:#0e3b33;
+  --leaf:#7fd18b;
+  --glow:#c8f5d2;
+  --ink:#e8f3ee;
+  --muted:#8fb3a8;
+  --line:rgba(200,245,210,.14);
+  --f-display:"Gloock", "Iowan Old Style", Georgia, serif;
+  --f-body:"Figtree", system-ui, -apple-system, "Segoe UI", sans-serif;
+  --f-mono:"JetBrains Mono", ui-monospace, Menlo, monospace;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--abyss);color:var(--ink);font-family:var(--f-body);font-size:16px;line-height:1.55}
+
+.hero{position:relative;height:clamp(560px,86vh,820px);overflow:hidden;isolation:isolate;background:var(--deep)}
+#tank{position:absolute;inset:0;width:100%;height:100%;display:block;cursor:crosshair}
+.hero::after{content:"";position:absolute;inset:0;pointer-events:none;
+  background:linear-gradient(90deg,rgba(4,17,15,.82) 0%,rgba(4,17,15,.35) 45%,rgba(4,17,15,0) 70%),
+             linear-gradient(0deg,rgba(4,17,15,.9) 0%,rgba(4,17,15,0) 32%)}
+
+.nav{position:absolute;top:0;left:0;right:0;z-index:3;display:flex;align-items:center;justify-content:space-between;gap:16px;
+  padding:calc(18px + env(safe-area-inset-top,0px)) clamp(16px,4vw,48px) 18px}
+.brand{font-family:var(--f-display);font-size:1.35rem;letter-spacing:.01em;color:var(--ink);text-decoration:none}
+.brand span{color:var(--leaf)}
+.links{display:flex;gap:clamp(14px,2.4vw,32px);font-size:.9rem}
+.links a{color:var(--muted);text-decoration:none;transition:color .2s}
+.links a:hover,.links a:focus-visible{color:var(--glow)}
+
+.copy{position:absolute;z-index:2;left:clamp(16px,4vw,48px);right:16px;bottom:clamp(40px,8vh,88px);max-width:620px;pointer-events:none}
+.eyebrow{font-family:var(--f-mono);font-size:.74rem;letter-spacing:.14em;text-transform:uppercase;color:var(--leaf);margin:0 0 18px;
+  display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:"";width:28px;height:1px;background:var(--leaf)}
+h1{font-family:var(--f-display);font-weight:400;font-size:clamp(2.6rem,7vw,5.4rem);line-height:.98;letter-spacing:-.02em;margin:0;text-wrap:balance}
+h1 em{font-style:italic;color:var(--glow)}
+.lede{color:var(--muted);font-size:clamp(1rem,1.6vw,1.12rem);max-width:46ch;margin:20px 0 28px}
+.ctas{display:flex;flex-wrap:wrap;gap:12px;pointer-events:auto}
+.btn{font:600 .95rem var(--f-body);padding:13px 22px;border-radius:999px;text-decoration:none;transition:transform .2s,background .2s,color .2s}
+.btn-primary{background:var(--leaf);color:var(--abyss)}
+.btn-primary:hover{background:var(--glow);transform:translateY(-2px)}
+.btn-ghost{color:var(--ink);border:1px solid var(--line);backdrop-filter:blur(6px);background:rgba(4,17,15,.3)}
+.btn-ghost:hover{border-color:var(--leaf);color:var(--glow)}
+.btn:focus-visible,.links a:focus-visible,.brand:focus-visible,.photo-link:focus-visible{outline:2px solid var(--glow);outline-offset:3px}
+
+.params{position:absolute;z-index:2;right:clamp(16px,4vw,48px);bottom:clamp(40px,8vh,88px);display:grid;gap:10px;
+  font-family:var(--f-mono);font-size:.74rem;color:var(--muted);text-align:right;font-variant-numeric:tabular-nums;pointer-events:none}
+.params b{display:block;font-weight:500;color:var(--glow);font-size:.95rem}
+.hint{position:absolute;z-index:2;top:50%;right:clamp(16px,4vw,48px);transform:translateY(-50%);font-family:var(--f-mono);font-size:.68rem;
+  letter-spacing:.14em;text-transform:uppercase;color:var(--muted);writing-mode:vertical-rl;opacity:.7;pointer-events:none}
+
+.guide{padding:clamp(40px,7vw,88px) clamp(16px,4vw,48px) 48px;max-width:1240px;margin:0 auto;display:grid;gap:32px}
+.guide-head{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:20px}
+.guide-head h2{font-family:var(--f-display);font-weight:400;font-size:clamp(1.9rem,4vw,2.8rem);line-height:1.05;margin:0;text-wrap:balance}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chip{font:500 .88rem var(--f-body);color:var(--muted);background:transparent;border:1px solid var(--line);border-radius:999px;padding:9px 16px;cursor:pointer;transition:all .2s}
+.chip:hover{color:var(--ink);border-color:var(--muted)}
+.chip[aria-pressed="true"]{background:var(--leaf);border-color:var(--leaf);color:var(--abyss)}
+.chip:focus-visible{outline:2px solid var(--glow);outline-offset:2px}
+
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,330px),1fr));gap:16px}
+.card{background:var(--deep);border:1px solid var(--line);border-radius:14px;overflow:hidden;display:grid;align-content:start;min-width:0;animation:rise .5s ease both}
+@keyframes rise{from{transform:translateY(10px)}to{transform:none}}
+.photo{position:relative;aspect-ratio:16/10;max-width:100%;overflow:hidden;display:grid;place-items:end start;padding:14px 16px}
+.photo img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.photo .ghost{position:absolute;right:-6px;bottom:-18px;font-family:var(--f-display);font-style:italic;font-size:4.2rem;line-height:1;color:rgba(232,243,238,.08);white-space:nowrap;pointer-events:none}
+.tag{position:relative;font-family:var(--f-mono);font-size:.64rem;letter-spacing:.12em;text-transform:uppercase;background:rgba(4,17,15,.7);color:var(--glow);padding:5px 9px;border-radius:999px}
+.body{padding:18px 20px 20px;display:grid;gap:14px}
+.card h3{font-family:var(--f-display);font-weight:400;font-size:1.45rem;line-height:1.1;margin:0}
+.sci{font-style:italic;color:var(--muted);font-size:.92rem;margin:3px 0 0}
+.facts{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1px;background:var(--line);border-radius:8px;overflow:hidden;margin:0}
+.facts div{background:var(--abyss);padding:9px 10px;min-width:0}
+.facts dt{font-family:var(--f-mono);font-size:.62rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.facts dd{margin:2px 0 0;font-size:.86rem;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.where{font-size:.9rem;color:var(--muted);margin:0}
+.where b{color:var(--ink);font-weight:500}
+.dyk{margin:0;font-size:.95rem;padding-top:12px;border-top:1px dashed var(--line)}
+.dyk span{font-family:var(--f-mono);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;color:var(--leaf);display:block;margin-bottom:4px}
+.photo-link{justify-self:start;font-size:.86rem;color:var(--leaf);text-decoration:none;border-bottom:1px solid transparent}
+.photo-link:hover{border-color:var(--leaf)}
+.foot{font-size:.85rem;color:var(--muted);text-align:center;padding-top:16px}
+
+@media (max-width:760px){
+  .links,.hint,.params{display:none}
+  .hero::after{background:linear-gradient(0deg,rgba(4,17,15,.95) 0%,rgba(4,17,15,.4) 55%,rgba(4,17,15,.1) 100%)}
+}
+@media (prefers-reduced-motion:reduce){.card{animation:none}.btn{transition:none}}
+</style>
+</head>
+<body>
+<section class="hero" aria-label="Animated view of the aquarium">
+  <canvas id="tank" aria-hidden="true"></canvas>
+  <nav class="nav" aria-label="Main navigation">
+    <a class="brand" href="#">The Living Tank<span>.</span></a>
+    <div class="links">
+      <a href="#species" data-jump="animal">Fish &amp; snails</a><a href="#species" data-jump="plant">Plants</a><a href="#species" data-jump="rock">Rocks</a>
+    </div>
+  </nav>
+  <div class="copy">
+    <p class="eyebrow">You scanned the tank · Freshwater</p>
+    <h1>Meet who lives <em>in here.</em></h1>
+    <p class="lede">Every fish, snail, plant and stone in this aquarium, where it comes from, and something worth knowing about it. Look up, then look closer.</p>
+    <div class="ctas">
+      <a class="btn btn-primary" href="#species" data-jump="animal">Meet the fish</a>
+      <a class="btn btn-ghost" href="#species" data-jump="plant">See the plants</a>
+    </div>
+  </div>
+  <div class="params" aria-label="What lives in this tank">
+    <div>Fish<b id="nFish">0</b></div>
+    <div>Snails<b id="nSnail">0</b></div>
+    <div>Plants<b id="nPlant">0</b></div>
+    <div>Stones<b id="nRock">0</b></div>
+  </div>
+  <div class="hint">Touch the water</div>
+</section>
+
+<main class="guide" id="species">
+  <header class="guide-head">
+    <div>
+      <p class="eyebrow">In this tank</p>
+      <h2>Find it, then read about it.</h2>
+    </div>
+    <div class="chips" role="group" aria-label="Filter">
+      <button class="chip" id="f-all" data-filter="all" aria-pressed="true">All</button>
+      <button class="chip" id="f-animal" data-filter="animal" aria-pressed="false">Fish &amp; snails</button>
+      <button class="chip" id="f-plant" data-filter="plant" aria-pressed="false">Plants</button>
+      <button class="chip" id="f-rock" data-filter="rock" aria-pressed="false">Rocks</button>
+    </div>
+  </header>
+  <div class="cards" id="cards" aria-live="polite"></div>
+  <footer class="foot">Please don't tap on the glass. The fish feel it as a loud thump.</footer>
+</main>
+
+<script>
+// Everything in the tank. Add a photo by setting photo: to an image URL or data: URI.
+const SPECIES = [
+  { kind:'animal', tag:'Fish', name:'Pristella tetra', sci:'Pristella maxillaris', color:['#2a4a3a','#c9b24a'],
+    photo:'Pristella%20tetra.jpg',
+    facts:[['From','N. South America'],['Size','4–5 cm'],['Water','24–28 °C']], zone:'Middle, swimming as a loose school',
+    fact:'Its body is so clear you can see its backbone, which is why it is also called the X-ray tetra. Look for the yellow, black and white flag on its back fin.',
+    wiki:'https://en.wikipedia.org/wiki/X-ray_tetra' },
+  { kind:'animal', tag:'Fish', name:'Swordtail', sci:'Xiphophorus hellerii', color:['#4a2a1a','#e0602a'],
+    photo:'Swordtail.jpg',
+    facts:[['From','Mexico, Central America'],['Size','10–14 cm'],['Water','22–28 °C']], zone:'Upper and middle, the bold orange swimmers',
+    fact:'Only males grow the "sword", a long extension of the tail fin. Swordtails give birth to live, free-swimming babies instead of laying eggs.',
+    wiki:'https://en.wikipedia.org/wiki/Green_swordtail' },
+  { kind:'animal', tag:'Fish', name:'Corydoras catfish', sci:'Corydoras sp.', color:['#2e2a22','#b9a27a'],
+    photo:'Corydoras%20catfish.webp',
+    facts:[['From','South America'],['Size','3–7 cm'],['Water','22–26 °C']], zone:'Bottom, sifting the sand in a group',
+    fact:'Corydoras can breathe air. Watch for one darting to the surface for a gulp, then back down. Their gut absorbs the oxygen.',
+    wiki:'https://en.wikipedia.org/wiki/Corydoras' },
+  { kind:'animal', tag:'Snail', name:'Malaysian trumpet snail', sci:'Melanoides tuberculata', color:['#2a241c','#8a6a4a'],
+    photo:'Malaysian%20trumpet%20snail.webp',
+    facts:[['From','Africa, S. Asia'],['Size','2–3 cm'],['Water','18–30 °C']], zone:'In the sand, out mostly at night',
+    fact:'These snails burrow by day, stirring the sand like tiny earthworms so it stays fresh. Females give birth to live young.',
+    wiki:'https://en.wikipedia.org/wiki/Melanoides_tuberculata' },
+  { kind:'plant', tag:'Plant', name:'Cryptocoryne', sci:'Cryptocoryne sp.', color:['#1f3a24','#6f8f3a'],
+    photo:'Cryptocoryne.jpg',
+    facts:[['From','South & SE Asia'],['Height','5–40 cm'],['Light','Low']], zone:'Front and middle, rooted in the sand',
+    fact:'Move a crypt and its leaves may melt away. It is not dying. The roots stay alive and sprout new leaves within weeks.',
+    wiki:'https://en.wikipedia.org/wiki/Cryptocoryne' },
+  { kind:'plant', tag:'Plant', name:'Water sprite', sci:'Ceratopteris thalictroides', color:['#1d3d26','#8ed16a'],
+    photo:'Water%20sprite.webp',
+    facts:[['From','Tropics worldwide'],['Height','20–40 cm'],['Light','Medium']], zone:'Back, the lacy light-green fern',
+    fact:'It is a true fern. New baby plants sprout right on its old leaves, and in parts of Asia the young shoots are eaten as a vegetable.',
+    wiki:'https://en.wikipedia.org/wiki/Ceratopteris_thalictroides' },
+  { kind:'plant', tag:'Plant', name:'Water wisteria', sci:'Hygrophila difformis', color:['#1c3a22','#7fc46a'],
+    photo:'plant-profile-water-wisteria.webp',
+    facts:[['From','India, Nepal, Bangladesh'],['Height','20–50 cm'],['Light','Medium']], zone:'Back and middle, the feathery leaves',
+    fact:'Its leaves change shape. Underwater they grow deeply cut and lacy; grown above water, the same plant makes rounder, simpler leaves.',
+    wiki:'https://en.wikipedia.org/wiki/Hygrophila_difformis' },
+  { kind:'plant', tag:'Plant', name:'Rotala green', sci:'Rotala rotundifolia', color:['#1a3a24','#9ad87a'],
+    photo:'Rotala%20green.JPG',
+    facts:[['From','South & SE Asia'],['Height','20–40 cm'],['Light','Medium']], zone:'Middle, the bushy stems with small leaves',
+    fact:'This is a green form of a plant that often turns pink under strong light. In the wild it grows half out of water in rice paddies.',
+    wiki:'https://en.wikipedia.org/wiki/Rotala_rotundifolia' },
+  { kind:'plant', tag:'Plant', name:'Hygrophila corymbosa', sci:'Hygrophila corymbosa', color:['#153923','#7bc86e'],
+    photo:'Hygrophila%20corymbosa.jpg',
+    facts:[['From','South Asia'],['Height','20–60 cm'],['Light','Medium to high']], zone:'Middle to back, upright stems with broad green leaves',
+    fact:'This plant grows rapidly and forms dense bushy clumps. It is often used in aquascapes for background structure and quick coverage of open water.',
+    wiki:'https://en.wikipedia.org/wiki/Hygrophila_corymbosa' },
+  { kind:'plant', tag:'Plant', name:'Anubias', sci:'Anubias sp.', color:['#13301c','#3f7a48'],
+    photo:'Anubias_nana_petite_1800_817b2fff-43ee-4dce-b329-5d4b99f47d88.webp',
+    facts:[['From','West & Central Africa'],['Height','5–30 cm'],['Light','Low']], zone:'On rocks or wood, the dark tough leaves',
+    fact:'Anubias is never buried. Its thick stem clings to stone, as it does along African streams, and its leathery leaves can last for years.',
+    wiki:'https://en.wikipedia.org/wiki/Anubias' },
+  { kind:'rock', tag:'Stone', name:'River rock', sci:'Rounded stream stone', color:['#2a2c2c','#8a8f8c'],
+    photo:'River%20rock.jpg',
+    facts:[['Formed by','Moving water'],['Effect','Inert'],['Texture','Smooth']], zone:'Along the bottom',
+    fact:'Its smooth shape comes from years of tumbling in a river. It does not change the water, so it suits any freshwater tank.',
+    wiki:'https://en.wikipedia.org/wiki/Pebble' },
+  { kind:'rock', tag:'Stone', name:'Oolitic rock', sci:'Oolite limestone', color:['#3a3428','#d8c9a0'],
+    photo:'Oolitic%20rock.jpg',
+    facts:[['Formed in','Shallow warm seas'],['Effect','Raises pH a little'],['Made of','Calcium carbonate']], zone:'The pale, grainy stone',
+    fact:'Look closely and you can see tiny round grains called ooids. Each one grew in layers as it rolled on the floor of an ancient sea.',
+    wiki:'https://en.wikipedia.org/wiki/Oolite' },
+];
+
+(() => {
+  const wrap = document.getElementById('cards');
+  const count = k => SPECIES.filter(s => s.kind === k).length;
+  const fishCount = () => SPECIES.filter(s => s.kind === 'animal' && s.tag !== 'Snail').length;
+  const snailCount = () => SPECIES.filter(s => s.kind === 'animal' && s.tag === 'Snail').length;
+  document.getElementById('nFish').textContent = fishCount();
+  document.getElementById('nSnail').textContent = snailCount();
+  document.getElementById('nPlant').textContent = count('plant');
+  document.getElementById('nRock').textContent = count('rock');
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+  function render(filter){
+    document.getElementById('nFish').textContent = fishCount();
+    document.getElementById('nSnail').textContent = snailCount();
+    document.getElementById('nPlant').textContent = count('plant');
+    document.getElementById('nRock').textContent = count('rock');
+    wrap.innerHTML = SPECIES.filter(s => filter === 'all' || s.kind === filter).map((s, i) => `
+      <article class="card" style="animation-delay:${i * 50}ms">
+        <div class="photo" style="background:radial-gradient(120% 90% at 20% 10%, ${s.color[1]}55, transparent 60%), linear-gradient(160deg, ${s.color[0]}, #04110f)">
+          ${s.photo ? `<img src="${esc(s.photo)}" alt="${esc(s.name)} in the tank" loading="lazy">` : `<span class="ghost" aria-hidden="true">${esc(s.sci.split(' ')[0])}</span>`}
+          <span class="tag">${esc(s.tag)}</span>
+        </div>
+        <div class="body">
+          <div><h3>${esc(s.name)}</h3><p class="sci">${esc(s.sci)}</p></div>
+          <dl class="facts">${s.facts.map(f => `<div><dt>${esc(f[0])}</dt><dd>${esc(f[1])}</dd></div>`).join('')}</dl>
+          <p class="where"><b>Spot it:</b> ${esc(s.zone)}</p>
+          <p class="dyk"><span>Did you know</span>${esc(s.fact)}</p>
+          ${s.wiki ? `<a class="photo-link" href="${esc(s.wiki)}" target="_blank" rel="noopener">See photos and more ↗</a>` : ''}
+        </div>
+      </article>`).join('');
+  }
+  function setFilter(f){
+    document.querySelectorAll('.chip').forEach(c => c.setAttribute('aria-pressed', String(c.dataset.filter === f)));
+    render(f);
+  }
+  document.querySelectorAll('.chip').forEach(c => c.addEventListener('click', () => setFilter(c.dataset.filter)));
+  document.querySelectorAll('[data-jump]').forEach(a => a.addEventListener('click', () => setFilter(a.dataset.jump)));
+  render('all');
+})();
+</script>
+
+<script>
+(() => {
+  const cv = document.getElementById('tank');
+  const ctx = cv.getContext('2d');
+  const reduce = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  let W = 0, H = 0, DPR = 1, t = 0, last = performance.now();
+  const pointer = { x: -9999, y: -9999, active: false };
+  const rand = (a, b) => a + Math.random() * (b - a);
+  let plants = [], school = [], swords = [], corys = [], snails = [], rocks = [], bubbles = [], motes = [], pebbles = [], rays = [];
+
+  function sandY(x){ return H - 46 - Math.sin(x * 0.004) * 14 - Math.sin(x * 0.011 + 1.3) * 6; }
+
+  function build(){
+    rays = Array.from({length: 7}, () => ({ x: rand(0.15, 1.05), w: rand(40, 140), sp: rand(.15, .4), ph: rand(0, 6.28), a: rand(.04, .09) }));
+    pebbles = Array.from({length: Math.round(W / 9)}, () => {
+      const x = rand(0, W); return { x, y: sandY(x) + rand(4, 40), r: rand(1.5, 5), c: `hsl(${rand(30,50)},${rand(8,20)}%,${rand(30,52)}%)` };
+    });
+    // Rocks: grey river rocks and pale oolitic stones
+    rocks = [];
+    const nRocks = Math.max(4, Math.round(W / 220));
+    for (let i = 0; i < nRocks; i++){
+      const x = rand(W * .05, W * .95), oo = i % 2 === 0;
+      const r = oo ? rand(40, 75) : rand(22, 44);
+      rocks.push({ x, r, oo, squash: rand(.55, .75), tilt: rand(-.2, .2),
+        dots: oo ? Array.from({length: 40}, () => [rand(-.8, .8), rand(-.8, .2), rand(.8, 2)]) : [] });
+    }
+    rocks.sort((a, b) => b.r - a.r);
+    // Plants
+    plants = [];
+    const n = Math.max(12, Math.round(W / 42));
+    const backTypes = ['sprite','wisteria','rotala','wisteria','sprite'];
+    for (let layer = 0; layer < 3; layer++){
+      const m = Math.round(n * (layer === 0 ? 1 : .6));
+      for (let i = 0; i < m; i++){
+        const type = layer === 2 ? (Math.random() < .7 ? 'crypt' : 'rotala') : backTypes[Math.floor(Math.random() * backTypes.length)];
+        const base = { sprite: rand(.4, .7), wisteria: rand(.35, .6), rotala: rand(.25, .5), crypt: rand(.1, .18) }[type];
+        plants.push({ x: rand(-20, W + 20), layer, type, h: H * base * (layer === 0 ? 1.05 : layer === 1 ? .85 : .7),
+          segs: Math.round(rand(9, 15)), ph: rand(0, 6.28), sp: rand(.5, 1.1), lean: rand(-.15, .15),
+          hue: { sprite: rand(95, 110), wisteria: rand(100, 125), rotala: rand(105, 130), crypt: rand(70, 95) }[type] });
+      }
+    }
+    // Anubias tufts on the oolitic rocks
+    for (const r of rocks.filter(r => r.oo)) plants.push({ x: r.x + rand(-r.r * .4, r.r * .2), layer: 3, type: 'anubias', h: rand(28, 44), ph: rand(0, 6.28), sp: rand(.4, .8), hue: 135, rock: r });
+    plants.sort((a, b) => a.layer - b.layer);
+    // Animals
+    school = Array.from({length: W < 600 ? 18 : 30}, () => ({ x: rand(W*.3, W*.9), y: rand(H*.3, H*.6), vx: rand(-1, 1), vy: rand(-.3, .3), s: rand(.85, 1.15), ph: rand(0, 6.28) }));
+    swords = Array.from({length: W < 600 ? 3 : 5}, (_, i) => ({ x: rand(0, W), y: rand(H*.15, H*.45), vx: rand(-1, 1), vy: 0, s: rand(.9, 1.2), ph: rand(0, 6.28), male: i % 2 === 0, tx: rand(0, W), ty: rand(H*.15, H*.5) }));
+    corys = Array.from({length: W < 600 ? 3 : 5}, () => { const x = rand(W*.1, W*.9); return { x, y: sandY(x) - 8, vx: rand(-.6, .6), s: rand(.9, 1.1), ph: rand(0, 6.28), dart: 0, home: 0 }; });
+    snails = Array.from({length: 6}, () => { const x = rand(0, W); return { x, dir: Math.random() < .5 ? -1 : 1, s: rand(.8, 1.2), sp: rand(1.5, 4) }; });
+    bubbles = Array.from({length: 24}, () => newBubble(true));
+    motes = Array.from({length: 70}, () => ({ x: rand(0, W), y: rand(0, H), r: rand(.4, 1.6), sp: rand(.05, .25), ph: rand(0, 6.28) }));
+  }
+  function newBubble(spread){
+    const srcX = W * .82;
+    return { x: srcX + rand(-12, 12), y: spread ? rand(0, H) : sandY(srcX) - 10, r: rand(1.2, 4.2), sp: rand(30, 70), ph: rand(0, 6.28) };
+  }
+  function resize(){
+    const r = cv.getBoundingClientRect();
+    DPR = Math.min(window.devicePixelRatio || 1, 2);
+    W = r.width; H = r.height;
+    cv.width = W * DPR; cv.height = H * DPR;
+    ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
+    build();
+  }
+
+  function drawWater(){
+    const g = ctx.createLinearGradient(0, 0, 0, H);
+    g.addColorStop(0, '#16574a'); g.addColorStop(.35, '#0c3a32'); g.addColorStop(1, '#04140f');
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    ctx.save(); ctx.globalCompositeOperation = 'lighter';
+    for (const r of rays){
+      const x = r.x * W + Math.sin(t * r.sp + r.ph) * 40;
+      const grd = ctx.createLinearGradient(0, 0, 0, H * .85);
+      grd.addColorStop(0, `rgba(200,255,220,${r.a * (0.7 + 0.3 * Math.sin(t * .7 + r.ph))})`);
+      grd.addColorStop(1, 'rgba(200,255,220,0)');
+      ctx.fillStyle = grd;
+      ctx.beginPath(); ctx.moveTo(x - r.w * .3, 0); ctx.lineTo(x + r.w * .3, 0);
+      ctx.lineTo(x - W * .12 + r.w, H * .85); ctx.lineTo(x - W * .12 - r.w * .4, H * .85); ctx.closePath(); ctx.fill();
+    }
+    ctx.strokeStyle = 'rgba(210,255,230,.10)'; ctx.lineWidth = 1.2;
+    for (let k = 0; k < 4; k++){
+      ctx.beginPath();
+      for (let x = 0; x <= W; x += 14){
+        const y = 8 + k * 9 + Math.sin(x * .02 + t * (1 + k * .3) + k) * 4 + Math.sin(x * .053 - t * 1.4) * 2;
+        x ? ctx.lineTo(x, y) : ctx.moveTo(x, y);
+      }
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  function drawSand(){
+    const g = ctx.createLinearGradient(0, H - 90, 0, H);
+    g.addColorStop(0, '#4a4231'); g.addColorStop(1, '#1a160f');
+    ctx.fillStyle = g;
+    ctx.beginPath(); ctx.moveTo(0, H);
+    for (let x = 0; x <= W; x += 10) ctx.lineTo(x, sandY(x));
+    ctx.lineTo(W, H); ctx.closePath(); ctx.fill();
+    for (const p of pebbles){ ctx.fillStyle = p.c; ctx.beginPath(); ctx.ellipse(p.x, p.y, p.r * 1.4, p.r, 0, 0, 6.28); ctx.fill(); }
+  }
+
+  function drawRocks(){
+    for (const r of rocks){
+      const by = sandY(r.x) + 10, ry = r.r * r.squash;
+      ctx.save(); ctx.translate(r.x, by - ry * .7); ctx.rotate(r.tilt);
+      const g = ctx.createRadialGradient(-r.r * .3, -ry * .5, r.r * .1, 0, 0, r.r * 1.1);
+      if (r.oo){ g.addColorStop(0, '#d8cba6'); g.addColorStop(.6, '#9c8f6e'); g.addColorStop(1, '#4a4332'); }
+      else { g.addColorStop(0, '#a3a8a4'); g.addColorStop(.6, '#5f6562'); g.addColorStop(1, '#2a2e2c'); }
+      ctx.fillStyle = g;
+      ctx.beginPath(); ctx.ellipse(0, 0, r.r, ry, 0, 0, 6.28); ctx.fill();
+      if (r.oo){ ctx.fillStyle = 'rgba(60,50,30,.35)'; for (const d of r.dots){ ctx.beginPath(); ctx.arc(d[0] * r.r, d[1] * ry, d[2], 0, 6.28); ctx.fill(); } }
+      ctx.restore();
+    }
+  }
+
+  function col(p, light){
+    const fog = [0.42, 0.7, 1, 1][p.layer];
+    return `hsl(${p.hue},${48 * fog + 10}%,${34 * fog + light}%)`;
+  }
+
+  function stemPoints(p, baseY){
+    const segLen = p.h / p.segs;
+    const push = pointer.active ? Math.max(0, 1 - Math.abs(pointer.x - p.x) / 160) * Math.sign(p.x - pointer.x) * .5 : 0;
+    let x = p.x, y = baseY, ang = -Math.PI / 2 + p.lean;
+    const pts = [[x, y, ang]];
+    for (let i = 1; i <= p.segs; i++){
+      const f = i / p.segs;
+      ang += (Math.sin(t * p.sp + p.ph + i * .35) * .06 + push * .05) * f + (-Math.PI/2 - ang) * .02;
+      x += Math.cos(ang) * segLen; y += Math.sin(ang) * segLen;
+      pts.push([x, y, ang]);
+    }
+    return pts;
+  }
+
+  function drawPlant(p){
+    const baseY = sandY(p.x) + 6 + p.layer * 6;
+    if (p.type === 'crypt' || p.type === 'anubias'){
+      const by = p.type === 'anubias' ? sandY(p.rock.x) + 10 - p.rock.r * p.rock.squash * 1.3 : baseY;
+      const leaves = p.type === 'crypt' ? 7 : 5;
+      for (let k = 0; k < leaves; k++){
+        const mid = (leaves - 1) / 2;
+        const a = -Math.PI/2 + (k - mid) * (p.type === 'crypt' ? .34 : .5) + Math.sin(t * p.sp + p.ph + k) * .06;
+        const len = p.h * (1 - Math.abs(k - mid) * .1);
+        ctx.save(); ctx.translate(p.x, by); ctx.rotate(a);
+        ctx.strokeStyle = col(p, -10); ctx.lineWidth = 1.4;
+        ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(len * .4, 0); ctx.stroke();
+        ctx.fillStyle = p.type === 'anubias' ? `hsl(135,40%,${18 + (k % 2) * 4}%)` : col(p, k % 2 ? 4 : 0);
+        ctx.beginPath(); ctx.ellipse(len * .7, 0, len * .34, len * (p.type === 'anubias' ? .2 : .14), 0, 0, 6.28); ctx.fill();
+        ctx.strokeStyle = 'rgba(0,0,0,.18)'; ctx.lineWidth = .8;
+        ctx.beginPath(); ctx.moveTo(len * .38, 0); ctx.lineTo(len * 1.02, 0); ctx.stroke();
+        ctx.restore();
+      }
+      return;
+    }
+    const pts = stemPoints(p, baseY);
+    ctx.strokeStyle = col(p, -8); ctx.lineWidth = 1.6 + p.layer * .4;
+    ctx.beginPath(); pts.forEach((q, i) => i ? ctx.lineTo(q[0], q[1]) : ctx.moveTo(q[0], q[1])); ctx.stroke();
+    for (let i = 1; i < pts.length; i++){
+      const [qx, qy, a] = pts[i];
+      const f = i / pts.length;
+      const flutter = Math.sin(t * 1.8 + i + p.ph) * .15;
+      ctx.save(); ctx.translate(qx, qy);
+      if (p.type === 'rotala'){
+        const L = (5 + p.layer * 2) * (1 - f * .4);
+        for (const side of [-1, 1]){
+          ctx.save(); ctx.rotate(a + side * (1.1 + flutter));
+          ctx.fillStyle = col(p, f * 14);
+          ctx.beginPath(); ctx.ellipse(L * .6, 0, L * .62, L * .3, 0, 0, 6.28); ctx.fill(); ctx.restore();
+        }
+      } else {
+        // sprite and wisteria: finely cut leaves drawn as fans of thin strokes
+        const L = (p.type === 'sprite' ? 16 : 12) * (1 - f * .35) * (1 + p.layer * .25);
+        ctx.strokeStyle = col(p, 6 + f * 10); ctx.lineWidth = p.type === 'sprite' ? 1.6 : 1.1; ctx.lineCap = 'round';
+        for (const side of [-1, 1]){
+          ctx.save(); ctx.rotate(a + side * (0.9 + flutter));
+          ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(L, 0);
+          const lobes = p.type === 'sprite' ? 3 : 5;
+          for (let k = 1; k <= lobes; k++){
+            const px = L * k / (lobes + 1), ll = L * .35 * (1 - k / (lobes + 2));
+            ctx.moveTo(px, 0); ctx.lineTo(px + ll * .7, -ll);
+            ctx.moveTo(px, 0); ctx.lineTo(px + ll * .7, ll);
+          }
+          ctx.stroke(); ctx.restore();
+        }
+      }
+      ctx.restore();
+    }
+  }
+
+  function flee(f){
+    if (!pointer.active) return [0, 0];
+    const dx = f.x - pointer.x, dy = f.y - pointer.y, d = Math.hypot(dx, dy) || 1;
+    return d < 130 ? [dx / d * (130 - d) * .012, dy / d * (130 - d) * .012] : [0, 0];
+  }
+  function clampSpeed(f, max, min){
+    const sp = Math.hypot(f.vx, f.vy);
+    if (sp > max){ f.vx *= max/sp; f.vy *= max/sp; } else if (sp < min && sp > 0){ f.vx *= min/sp; f.vy *= min/sp; }
+    return sp;
+  }
+
+  function updateAnimals(dt){
+    const k = dt * 60;
+    const cx = W * (.55 + .28 * Math.sin(t * .13)), cy = H * (.45 + .12 * Math.sin(t * .21 + 1));
+    for (const f of school){
+      let ax = (cx - f.x) * .0009, ay = (cy - f.y) * .0012, sx = 0, sy = 0, avx = 0, avy = 0, n = 0;
+      for (const o of school){
+        if (o === f) continue;
+        const dx = f.x - o.x, dy = f.y - o.y, d2 = dx*dx + dy*dy;
+        if (d2 < 3600){ avx += o.vx; avy += o.vy; n++; if (d2 < 300){ sx += dx / (d2 + 1); sy += dy / (d2 + 1); } }
+      }
+      if (n){ ax += (avx/n - f.vx) * .04; ay += (avy/n - f.vy) * .04; }
+      const [fx, fy] = flee(f);
+      ax += sx * 1.4 + fx; ay += sy * 1.4 + fy;
+      if (f.y > H - 130) ay -= .05; if (f.y < 60) ay += .05;
+      f.vx += ax * k; f.vy += ay * k;
+      const sp = clampSpeed(f, 2.3, .7);
+      f.x += f.vx * k; f.y += f.vy * k; f.ph += dt * (6 + sp * 3);
+    }
+    for (const f of swords){
+      if (Math.hypot(f.tx - f.x, f.ty - f.y) < 40){ f.tx = rand(W*.05, W*.95); f.ty = rand(H*.12, H*.5); }
+      const [fx, fy] = flee(f);
+      f.vx += ((f.tx - f.x) * .0006 + fx) * k; f.vy += ((f.ty - f.y) * .0006 + fy) * k;
+      f.vx *= .99; f.vy *= .99;
+      const sp = clampSpeed(f, 1.6, .35);
+      f.x += f.vx * k; f.y += f.vy * k; f.ph += dt * (4 + sp * 3);
+    }
+    for (const c of corys){
+      const floor = sandY(c.x) - 8;
+      if (c.dart === 0 && Math.random() < dt * .03) c.dart = 1;           // occasional dash up for air
+      if (c.dart === 1){ c.y -= 3.2 * k; if (c.y < 40) c.dart = 2; }
+      else if (c.dart === 2){ c.y += 2 * k; if (c.y >= floor){ c.y = floor; c.dart = 0; } }
+      else { c.y = floor + Math.sin(t * 3 + c.ph) * 1.5; }
+      const [fx] = flee(c);
+      c.vx += (fx * .5 + Math.sin(t * .4 + c.ph) * .01) * k;
+      c.vx = Math.max(-.9, Math.min(.9, c.vx));
+      c.x += c.vx * k;
+      if (c.x < 20 || c.x > W - 20) c.vx *= -1;
+      c.ph += dt * 5;
+    }
+    for (const s of snails){
+      s.x += s.dir * s.sp * dt;
+      if (s.x < 10 || s.x > W - 10) s.dir *= -1;
+    }
+  }
+
+  function tailFin(L, Hh, wag, color){
+    ctx.fillStyle = color;
+    ctx.save(); ctx.translate(-L * .5, 0); ctx.rotate(wag);
+    ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(-L * .38, -Hh * 1.1); ctx.lineTo(-L * .3, 0); ctx.lineTo(-L * .38, Hh * 1.1); ctx.closePath(); ctx.fill();
+    ctx.restore();
+  }
+  function eye(x, y, r){ ctx.fillStyle = '#0b0b0b'; ctx.beginPath(); ctx.arc(x, y, r, 0, 6.28); ctx.fill(); }
+
+  function drawPristella(f){
+    const a = Math.atan2(f.vy, f.vx), L = 15 * f.s, Hh = 4.4 * f.s, wag = Math.sin(f.ph) * .35;
+    ctx.save(); ctx.translate(f.x, f.y); ctx.rotate(a);
+    if (Math.cos(a) < 0) ctx.scale(1, -1);
+    tailFin(L, Hh, wag, 'rgba(230,120,90,.55)');
+    ctx.fillStyle = 'rgba(220,225,190,.55)';                    // translucent body
+    ctx.beginPath(); ctx.ellipse(0, 0, L * .55, Hh, 0, 0, 6.28); ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,.35)'; ctx.lineWidth = .8;  // visible spine
+    ctx.beginPath(); ctx.moveTo(-L * .45, 0); ctx.lineTo(L * .3, -Hh * .1); ctx.stroke();
+    // dorsal flag: yellow, black, white
+    ctx.save(); ctx.translate(-L * .05, -Hh * .9);
+    ctx.fillStyle = '#e8cf3a'; ctx.beginPath(); ctx.moveTo(-3, 0); ctx.lineTo(0, -Hh * 1.2); ctx.lineTo(4, 0); ctx.fill();
+    ctx.fillStyle = '#111'; ctx.fillRect(-1.6, -Hh * .75, 3.4, Hh * .4);
+    ctx.fillStyle = '#f4f4f0'; ctx.beginPath(); ctx.arc(.2, -Hh * 1.1, 1.1, 0, 6.28); ctx.fill();
+    ctx.restore();
+    eye(L * .36, -Hh * .15, 1.2 * f.s);
+    ctx.restore();
+  }
+
+  function drawSwordtail(f){
+    const a = Math.atan2(f.vy, f.vx), L = 26 * f.s, Hh = 6.5 * f.s, wag = Math.sin(f.ph) * .28;
+    ctx.save(); ctx.translate(f.x, f.y); ctx.rotate(a);
+    if (Math.cos(a) < 0) ctx.scale(1, -1);
+    tailFin(L, Hh, wag, '#e2602a');
+    if (f.male){                                               // the sword
+      ctx.save(); ctx.translate(-L * .55, 0); ctx.rotate(wag);
+      ctx.fillStyle = '#e2602a'; ctx.beginPath(); ctx.moveTo(0, Hh * .3); ctx.lineTo(-L * .85, Hh * .9); ctx.lineTo(-L * .2, Hh * 1.1); ctx.fill();
+      ctx.fillStyle = '#151515'; ctx.beginPath(); ctx.moveTo(-L * .2, Hh * .95); ctx.lineTo(-L * .85, Hh * .9); ctx.lineTo(-L * .2, Hh * 1.1); ctx.fill();
+      ctx.restore();
+    }
+    const g = ctx.createLinearGradient(0, -Hh, 0, Hh);
+    g.addColorStop(0, '#d8461e'); g.addColorStop(1, '#ffa45a');
+    ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(0, 0, L * .55, Hh, 0, 0, 6.28); ctx.fill();
+    ctx.fillStyle = '#e2602a'; ctx.beginPath(); ctx.moveTo(-L * .1, -Hh * .9); ctx.lineTo(L * .05, -Hh * 1.6); ctx.lineTo(L * .2, -Hh * .9); ctx.fill();
+    eye(L * .36, -Hh * .2, 1.6 * f.s);
+    ctx.restore();
+  }
+
+  function drawCory(c){
+    const L = 18 * c.s, Hh = 5.5 * c.s, dir = c.vx >= 0 ? 1 : -1;
+    const up = c.dart === 1 ? -1.1 : c.dart === 2 ? .6 : 0;
+    ctx.save(); ctx.translate(c.x, c.y); ctx.scale(dir, 1); ctx.rotate(up * .8);
+    tailFin(L, Hh, Math.sin(c.ph) * .3, '#a8946a');
+    const g = ctx.createLinearGradient(0, -Hh, 0, Hh);
+    g.addColorStop(0, '#6e6150'); g.addColorStop(1, '#d9ccb0');
+    ctx.fillStyle = g; ctx.beginPath(); ctx.ellipse(0, 0, L * .55, Hh, 0, 0, 6.28); ctx.fill();
+    ctx.fillStyle = 'rgba(40,32,24,.6)';
+    for (let i = 0; i < 5; i++){ ctx.beginPath(); ctx.arc(-L * .3 + i * L * .13, -Hh * .2 + (i % 2) * 2, 1.1, 0, 6.28); ctx.fill(); }
+    ctx.fillStyle = '#7a6a52'; ctx.beginPath(); ctx.moveTo(-L * .05, -Hh * .9); ctx.lineTo(L * .05, -Hh * 2); ctx.lineTo(L * .18, -Hh * .9); ctx.fill();
+    ctx.strokeStyle = '#d9ccb0'; ctx.lineWidth = .8;              // barbels
+    ctx.beginPath(); ctx.moveTo(L * .5, Hh * .4); ctx.lineTo(L * .62, Hh * .9 + Math.sin(c.ph) * 1.5); ctx.stroke();
+    eye(L * .32, -Hh * .25, 1.4 * c.s);
+    ctx.restore();
+  }
+
+  function drawSnail(s){
+    const y = sandY(s.x) + 2, L = 11 * s.s;
+    ctx.save(); ctx.translate(s.x, y); ctx.scale(s.dir, 1); ctx.rotate(-.35);
+    ctx.fillStyle = '#5a4a38';
+    ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(-L, -L * .22); ctx.lineTo(-L, L * .22); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = 'rgba(200,170,130,.5)'; ctx.lineWidth = .7;
+    for (let i = 1; i < 4; i++){ const x = -L * i / 4; ctx.beginPath(); ctx.moveTo(x, -L * .22 * i / 4); ctx.lineTo(x - 1.5, L * .22 * i / 4); ctx.stroke(); }
+    ctx.restore();
+  }
+
+  function drawBubbles(dt){
+    for (const b of bubbles){
+      b.y -= b.sp * dt; b.ph += dt * 3;
+      const x = b.x + Math.sin(b.ph) * 3;
+      if (b.y < -10) Object.assign(b, newBubble(false), { temp: false });
+      ctx.strokeStyle = 'rgba(220,255,240,.55)'; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.arc(x, b.y, b.r, 0, 6.28); ctx.stroke();
+      ctx.fillStyle = 'rgba(255,255,255,.6)'; ctx.beginPath(); ctx.arc(x - b.r*.35, b.y - b.r*.35, b.r*.3, 0, 6.28); ctx.fill();
+    }
+  }
+  function drawMotes(dt){
+    ctx.fillStyle = 'rgba(210,250,225,.35)';
+    for (const m of motes){
+      m.y -= m.sp * dt * 20; m.ph += dt * .5;
+      if (m.y < 0){ m.y = H; m.x = rand(0, W); }
+      ctx.beginPath(); ctx.arc(m.x + Math.sin(m.ph) * 6, m.y, m.r, 0, 6.28); ctx.fill();
+    }
+  }
+
+  function frame(now){
+    const dt = Math.min((now - last) / 1000, .05); last = now; t += dt;
+    drawWater();
+    drawMotes(dt);
+    for (const p of plants) if (p.layer === 0) drawPlant(p);
+    ctx.fillStyle = 'rgba(8,40,34,.35)'; ctx.fillRect(0, 0, W, H);
+    for (const p of plants) if (p.layer === 1) drawPlant(p);
+    updateAnimals(dt);
+    swords.forEach(drawSwordtail);
+    school.forEach(drawPristella);
+    drawSand();
+    drawRocks();
+    snails.forEach(drawSnail);
+    corys.forEach(drawCory);
+    for (const p of plants) if (p.layer >= 2) drawPlant(p);
+    drawBubbles(dt);
+    const v = ctx.createRadialGradient(W*.6, H*.4, H*.2, W*.6, H*.4, Math.max(W, H) * .85);
+    v.addColorStop(0, 'rgba(0,0,0,0)'); v.addColorStop(1, 'rgba(2,10,8,.55)');
+    ctx.fillStyle = v; ctx.fillRect(0, 0, W, H);
+    if (!reduce) requestAnimationFrame(frame);
+  }
+
+  function setPointer(e){
+    const r = cv.getBoundingClientRect();
+    const p = e.touches ? e.touches[0] : e;
+    pointer.x = p.clientX - r.left; pointer.y = p.clientY - r.top; pointer.active = true;
+  }
+  const hero = cv.parentElement;
+  hero.addEventListener('pointermove', setPointer);
+  hero.addEventListener('pointerleave', () => { pointer.active = false; });
+  hero.addEventListener('touchmove', setPointer, { passive: true });
+  hero.addEventListener('touchend', () => { pointer.active = false; });
+  hero.addEventListener('click', e => {
+    const r = cv.getBoundingClientRect();
+    for (let i = 0; i < 10; i++) bubbles.push({ x: e.clientX - r.left + rand(-8, 8), y: e.clientY - r.top + rand(-8, 8), r: rand(1, 3.5), sp: rand(50, 110), ph: rand(0, 6.28), temp: true });
+    bubbles = bubbles.filter(b => !b.temp || b.y > -5).slice(-80);
+  });
+
+  let rt; addEventListener('resize', () => { clearTimeout(rt); rt = setTimeout(() => { resize(); if (reduce) frame(performance.now()); }, 120); });
+  resize();
+  if (reduce){ t = 3; frame(performance.now()); } else requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
